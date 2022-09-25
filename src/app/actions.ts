@@ -5,3 +5,8 @@ export const increaseCounter = {
 export const decreaseCounter = {
     type: 'DECREASE_COUNTER'
 };
+
+export const loadingAction = (loading: boolean) => ({
+    type: 'SET_LOADING',
+    payload: loading
+});

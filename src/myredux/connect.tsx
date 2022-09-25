@@ -10,7 +10,7 @@ export function connect<
     State extends AnyState = AnyState
 >(
     mapStateToProps: MapStateToPropsType<State, StateProps>,
-    mapDispatchToProps: MapDispatchToPropsType<DispatchProps>,
+    mapDispatchToProps: MapDispatchToPropsType<State, DispatchProps>,
 ) {
     const connectWrapper = (Component: (props: OwnProps & StateProps & DispatchProps) => JSX.Element) => (props: OwnProps) => {
         const { mappedState, mappedDispatch } = useStore(mapStateToProps, mapDispatchToProps);;

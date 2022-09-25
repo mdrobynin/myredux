@@ -2,30 +2,41 @@ import { Observable } from './observable';
 
 import { Action, AnyState, Reducer } from './types';
 
-export class Store<State extends AnyState = AnyState> {
-    private currentState: State;
-    private reducer: Reducer<State>;
-    private observable: Observable<State>;
+export class Store<S extends AnyState = AnyState> {
+    private currentState: S;
+    private reducer: Reducer<S>;
+    private observable: Observable<S>;
 
-    constructor(reducer: Reducer<State>, initialValues: State) {
+    constructor(reducer: Reducer<S>, initialValues: S) {
         this.reducer = reducer;
         this.currentState = initialValues;
         this.observable = new Observable();
+        this.getState = this.getState.bind(this);
+        this.dispatch = this.dispatch.bind(this);
     }
 
-    subscribe(subscriber: (state: State) => void) {
+    subscribe(subscriber: (state: S) => void) {
         if (this.observable.subscribe(subscriber)) {
             this.callUpdate();
         }
     }
 
     getState() {
-        return JSON.parse(JSON.stringify(this.currentState));
+        return JSON.parse(JSON.stringify(this.currentState)) as S;
     }
 
-    dispatch(action: Action) {
-        this.currentState = this.reducer(this.getState(), action);
-        this.callUpdate();
+    dispatch(action: Action<S>) {
+        if (action) {
+            if (typeof action === 'function') {
+                action({
+                    dispatch: this.dispatch,
+                    getState: this.getState
+                });
+            } else {
+                this.currentState = this.reducer(this.getState(), action);
+                this.callUpdate();
+            }
+        }
     }
 
     private callUpdate() {
