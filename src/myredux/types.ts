@@ -1,17 +1,7 @@
-type ObjectState = { [key: string]: any };
-
-export type OwnProps = ObjectState;
-export type StateProps = ObjectState;
-export type DispatchProps = { [key: string]: (...args: any) => void };
-export type RootState = ObjectState;
+export type AnyState = { [key: string]: any };
+export type AnyDispatch = { [key: string]: () => void };
 export type Action = { type: string, payload?: any };
+export type Reducer<State> = (state: State, action: Action) => State;
 
-export type DispatchFn = (action: Action) => void;
-export type MapStateToProps = ((state: RootState) => ObjectState) | null;
-export type MapDispatchToProps = ((fn: DispatchFn) => DispatchProps) | null;
-export type StoreReducer = (state: StateProps, action: Action) => StateProps;
-
-export type ConnectedElementProps = OwnProps & StateProps & DispatchProps;
-export type ConnectedElement = (props: ConnectedElementProps) => JSX.Element;
-
-export type Subscriber<T> = (args: T) => void; 
+export type MapStateToPropsType<S extends AnyState, T extends AnyState> = ((state: S) => T) | null;
+export type MapDispatchToPropsType<S extends AnyDispatch> = ((dispatch: (action: Action) => void) => S) | null;

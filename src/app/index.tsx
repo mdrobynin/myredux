@@ -1,10 +1,23 @@
 import React from 'react';
 
-import { connect, Provider, StateProps } from '../myredux';
+import { connect, Provider } from '../myredux';
 import { store } from './store';
 import { increaseCounter, decreaseCounter } from './actions';
 
-const ConnectedComponent1 = ({ counter, increase, decrease }: StateProps) => {
+interface Props {
+    value: number;
+}
+
+interface StateProps {
+    counter: number;
+}
+
+interface DispatchProps {
+    increase: () => void;
+    decrease: () => void;
+}
+
+const ConnectedComponent1 = ({ counter, increase, decrease }: StateProps & DispatchProps & Props) => {
     console.log('rendered Component1');
 
     return (
@@ -18,7 +31,7 @@ const ConnectedComponent1 = ({ counter, increase, decrease }: StateProps) => {
     );
 };
 
-const Component1 = connect(
+const Component1 = connect<StateProps, DispatchProps, Props>(
     state => ({ counter: state.counter }),
     dispatch => ({
         increase: () => dispatch(increaseCounter),
@@ -40,7 +53,7 @@ const Component2 = () => {
 export const App = () => {
     return (
         <Provider store={store}>
-            <Component1 />
+            <Component1 value={123} />
             <Component2 />
         </Provider>
     );

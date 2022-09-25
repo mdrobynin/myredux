@@ -1,18 +1,19 @@
 import { Observable } from './observable';
-import { Action, StateProps, StoreReducer } from './types';
 
-export class Store {
-    private currentState: StateProps;
-    private reducer: StoreReducer;
-    private observable: Observable<StateProps>;
+import { Action, AnyState, Reducer } from './types';
 
-    constructor(reducer: StoreReducer, initialValues: StateProps) {
+export class Store<State extends AnyState = AnyState> {
+    private currentState: State;
+    private reducer: Reducer<State>;
+    private observable: Observable<State>;
+
+    constructor(reducer: Reducer<State>, initialValues: State) {
         this.reducer = reducer;
         this.currentState = initialValues;
         this.observable = new Observable();
     }
 
-    subscribe(subscriber: (state: StateProps) => void) {
+    subscribe(subscriber: (state: State) => void) {
         if (this.observable.subscribe(subscriber)) {
             this.callUpdate();
         }
@@ -32,6 +33,6 @@ export class Store {
     }
 }
 
-export function createStore(reducer: StoreReducer, initialValues: StateProps) {
+export function createStore<State extends AnyState = AnyState>(reducer: Reducer<State>, initialValues: State) {
     return new Store(reducer, initialValues);
 }

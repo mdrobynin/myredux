@@ -1,5 +1,6 @@
 import React from 'react';
-import { Store } from "./store";
+
+import { Store } from './store';
 import { StoreContext } from './context';
 
 export interface ProviderProps {

@@ -1,14 +1,20 @@
 import React from 'react';
 
-import { OwnProps, MapStateToProps, MapDispatchToProps, ConnectedElementProps } from './types';
+import { AnyState, MapStateToPropsType, MapDispatchToPropsType } from './types';
 import { useStore } from './useStore';
 
-export function connect(
-    mapStateToProps: MapStateToProps,
-    mapDispatchToProps: MapDispatchToProps,
+export function connect<
+    StateProps extends AnyState = AnyState,
+    DispatchProps extends AnyState = AnyState,
+    OwnProps = {},
+    State extends AnyState = AnyState
+>(
+    mapStateToProps: MapStateToPropsType<State, StateProps>,
+    mapDispatchToProps: MapDispatchToPropsType<DispatchProps>,
 ) {
-    const connectWrapper = (Component: (props: ConnectedElementProps) => JSX.Element) => (props: OwnProps) => {
-        const { mappedState, mappedDispatch } = useStore(mapStateToProps, mapDispatchToProps);
+    const connectWrapper = (Component: (props: OwnProps & StateProps & DispatchProps) => JSX.Element) => (props: OwnProps) => {
+        const { mappedState, mappedDispatch } = useStore(mapStateToProps, mapDispatchToProps);;
+
         return <Component {...props} {...mappedState} {...mappedDispatch} />;
     };
 
