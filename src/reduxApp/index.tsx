@@ -11,6 +11,7 @@ interface Props {
 
 interface StateProps {
     counter: number;
+    message: string;
     isLoading: boolean;
 }
 
@@ -20,7 +21,7 @@ interface DispatchProps {
     load: () => void;
 }
 
-const ConnectedComponent1 = ({ counter, isLoading, increase, decrease, load }: StateProps & DispatchProps & Props) => {
+const ConnectedComponent1 = ({ counter, message, increase, decrease, load }: StateProps & DispatchProps & Props) => {
     console.log('rendered Component1');
 
     return (
@@ -37,23 +38,26 @@ const ConnectedComponent1 = ({ counter, isLoading, increase, decrease, load }: S
             <div>
                 {counter}
             </div>
-            <div>{isLoading ? 'Loading....' : ''}</div>
+            <div>{message}</div>
         </div>
     );
 };
 
 function loadThunk({ getState, dispatch }: ThunkProps) {
-    dispatch(loadingAction(true));
+    const item = getState().counter;
+
+    dispatch(loadingAction(true, 'Loading ' + item + ' item'));
 
     setTimeout(() => {
-        dispatch(loadingAction(false));
+        dispatch(loadingAction(false, item + ' was loaded'));
     }, 3000);
 }
 
 const Component1 = connect<StateProps, DispatchProps, Props>(
     state => ({
         counter: state.counter,
-        isLoading: state.isLoading
+        isLoading: state.isLoading,
+        message: state.message
     }),
     dispatch => ({
         increase: () => dispatch(increaseCounter),
@@ -73,7 +77,7 @@ const Component2 = () => {
 };
 
 
-export const App = () => {
+export const ReduxApp = () => {
     return (
         <Provider store={store}>
             <Component1 value={123} />

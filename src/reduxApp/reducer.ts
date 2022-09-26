@@ -10,7 +10,7 @@ export const reducer = (state: AnyState, action: PlainAction) => {
             return { ...state, counter: state.counter - 1 }
         }
         case 'SET_LOADING': {
-            return { ...state, isLoading: action.payload }
+            return { ...state, isLoading: action.payload.loading, message: action.payload.message }
         }
         default:
             return state;
