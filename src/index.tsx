@@ -12,3 +12,5 @@ root.render(
     <ReduxApp />
   </StrictMode>
 );
+
+import './mymobx';

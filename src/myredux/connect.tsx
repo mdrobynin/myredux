@@ -13,9 +13,9 @@ export function connect<
     mapDispatchToProps: MapDispatchToPropsType<State, DispatchProps>,
 ) {
     const connectWrapper = (Component: (props: OwnProps & StateProps & DispatchProps) => JSX.Element) => (props: OwnProps) => {
-        const { mappedState, mappedDispatch } = useStore(mapStateToProps, mapDispatchToProps);;
+        const mappedProps = useStore(mapStateToProps, mapDispatchToProps);
 
-        return <Component {...props} {...mappedState} {...mappedDispatch} />;
+        return <Component {...props} {...mappedProps} />;
     };
 
     return connectWrapper;
